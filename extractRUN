@@ -4,11 +4,15 @@ curdir=${PWD##*/}
 currentdir=`pwd`
 
 pwd | grep "_acq$"
+if [ "$?" -ne "1" ]; then
+    echo pwd | grep "_acq/plucquisition$"
+fi
+
 if [ "$?" = "1" ]; then
    if [ "$curdir" = "offline" ]; then
        echo ____________ branch is network ______________________
    else
-       echo RUN ME from ...._acq  directory or ..._acq/offline/ directory !
+       echo RUN ME from ...._acq  or _acq/plucquisition  or ..._acq/offline/ directory !
        exit
    fi
 fi    
@@ -94,7 +98,9 @@ else
 	bunzip2 -v $DESTFILE.bz2
     else
 	echo COPYING RAW ALL FILES =================================================
+	echo .
 	ls -1tr *.vme_u | xargs -I III cat III  | pv -s $SIZE -L 190M > ~/RUN$RUNNUM
+	echo .
 	SIZEnew=`stat -c %s  ~/RUN$RUNNUM`
 	if [ "$SIZEnew" = "0" ]; then
 	    echo NO DATA COPIED ... I try to bunzip `ls -1 *.vme_u.bz2 |wc -l` .vme_u.bz2 files
@@ -182,6 +188,7 @@ else
  OUTDIR=`basename $currentdir _acq`
  OUTDIR2="$OUTDIR5/${OUTDIR}_root/run${RUNNUM}${FILE}"
  OUTDIR=$OUTDIR2
+ echo _____________________________________________________________
  echo cd $currentdir
  echo " "
  echo root -l
